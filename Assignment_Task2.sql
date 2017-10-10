@@ -12,7 +12,7 @@ ORDER BY username DESC;
 /*Task2_question3*/
 SELECT *
 FROM Phonenumber
-WHERE username = ( SELECT username from Player ORDER By dob ASC LIMIT 1);
+WHERE username = ( SELECT username from Player ORDER BY dob ASC LIMIT 1);
 
 /*Task2_question4*/
 SELECT badge.badgeName, player.firstName, player.lastName, player.email
@@ -22,5 +22,24 @@ badge.badgeID = purchase.badgeID
 ORDER BY badge.badgeName,player.firstName,player.lastName ASC;
 
 /*Task2_question5*/
+
+
+
+
+
+/*Task3_question1*/
+INSERT INTO badge (badgeID, badgeName, badgeDescription)
+VALUE ('18','Fools Gold','Trickiest trickster in all the seas');
+
+/*Task3_question2*/
+
+DELETE FROM playerprogress
+WHERE progress = 'inactive';
+
+/*Task3_question3*/
+UPDATE player
+SET streetNumber = '72', streetName = 'Evergreen Terrace', suburb= 'Springfield'
+WHERE lastName = 'Smith';
+
 
 
