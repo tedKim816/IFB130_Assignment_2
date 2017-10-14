@@ -2,7 +2,6 @@
 /* Min Ho Kim - n8051381   */
 /* Task1 - Oktomook Book Store Database */
 
-drop database Oktomook;
 create database if not exists Oktomook;
 use Oktomook;
 
