@@ -1,17 +1,23 @@
+/* Ji Su Choi - n9678166 */
+/* Min Ho Kim - n8051381   */
+/* Task1 - Oktomook Book Store Database */
 
-DROP TABLE IF EXISTS `Branch`;
+drop database Oktomook;
+create database if not exists Oktomook;
+use Oktomook;
+
 create table Branch (
 	branchNumber int not null,
     branchName varchar(60),
-    streetNo int,
+    streetNo smallint,
     streetName varchar(50),
-    branchCity varchar(100),
-    branchState varchar(100),
+    branchCity varchar(60),
+    branchState varchar(60),
     numberEmployees int,
     primary key (branchNumber)
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `Publisher`;
+
 create table Publisher(
 	publisherCode int not null,
     publisherName varchar(60) not null,
@@ -20,43 +26,41 @@ create table Publisher(
     primary key (publisherCode)
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `Author`;
+
 create table Author(
 	authorID int auto_increment,
-    firstName varchar(60),
-    lastName varchar(60),
+    firstName varchar(60) not null,
+    lastName varchar(60) not null,
     primary key (authorID)
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `Book`;
+
 create table Book(
 	ISBN int not null,
     title varchar(60) not null,
-    publisherCode int not null,
+    publisherCode int,
     genre enum('Non-Fiction', 'Science Fiction', 'Fantasy', 'Crime', 'Mystery', 'Young Adult', 'Romance', 'General Fiction'),
-    retailPrice int,
-    paperback enum('True', 'False'),
+    retailPrice double,
+    paperback bool,
+    constraint checkISBN check(ISBN <= 9999999999999),
     primary key (ISBN),
-    foreign key (publisherCode) references Publisher(publisherCode),
-    check (ISBN=13)
+    foreign key (publisherCode) references Publisher(publisherCode)
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `Wrote`;
+
 create table Wrote(
 	ISBN int not null,
-    authorID int,
+    authorID int not null,
     sequenceNumber int,
     foreign key (ISBN) references Book(ISBN),
-    foreign key (authorID) references Author(authorID),
-    check (ISBN=13)
+    foreign key (authorID) references Author(authorID)
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `Inventory`;
+
 create table Inventory(
 	ISBN int not null,
     branchNumber int not null,
-    quantityInStock int,
+    quantityInStock int default 0,
     foreign key (branchNumber) references Branch(branchNumber),
-    foreign key (ISBN) references Book(ISBN),
-	check (ISBN=13)
+    foreign key (ISBN) references Book(ISBN)
 	)ENGINE=InnoDB DEFAULT CHARSET=utf8;
