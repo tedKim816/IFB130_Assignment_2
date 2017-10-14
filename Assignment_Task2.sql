@@ -22,7 +22,10 @@ badge.badgeID = purchase.badgeID
 ORDER BY badge.badgeName,player.firstName,player.lastName ASC;
 
 /*Task2_question5*/
-
+select username, progress,type, count(*) as theNumberOfCompletedCommonQeust
+from playerprogress p, treasure t 
+where  p.progress = 'complete' and t.type = 'common'
+group by  p.username;
 
 
 
