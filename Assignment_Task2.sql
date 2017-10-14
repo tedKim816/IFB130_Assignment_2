@@ -22,12 +22,10 @@ badge.badgeID = purchase.badgeID
 ORDER BY badge.badgeName,player.firstName,player.lastName ASC;
 
 /*Task2_question5*/
-select username, progress,type, count(*) as theNumberOfCompletedCommonQeust
-from playerprogress p, treasure t 
-where  p.progress = 'complete' and t.type = 'common'
-group by  p.username;
-
-
+SELECT username, COUNT(*) AS theNumberOfCompletedCommonQeust
+FROM playerprogress p, treasure t 
+WHERE  p.progress = 'complete' AND t.type = 'common'
+GROUP BY p.username;
 
 
 /*Task3_question1*/
@@ -44,5 +42,17 @@ UPDATE player
 SET streetNumber = '72', streetName = 'Evergreen Terrace', suburb= 'Springfield'
 WHERE lastName = 'Smith';
 
+/*Task4_Index*/
+CREATE INDEX treasureWebpage
+ON treasure(webpage);
 
+/*Task4_Create View*/
+CREATE VIEW newList AS 
+SELECT DISTINCT firstName, lastName, creationDateTime
+FROM player p, playerprogress prg
+WHERE p.username = prg.username AND prg.progress NOT IN ('complete');
 
+/*Task5_A*/
+/*Task5_B*/
+/*Task5_C*/
+/*Task5_D*/
