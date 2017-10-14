@@ -1,0 +1,149 @@
+
+ /*task 1*/
+
+create table Branch 
+(
+ branchNumber int not null auto_increment,
+ branchName nvarchar(50),
+ streetNo smallint,
+ streetName nvarchar(50),
+ branchCity nvarchar(50),
+ numberEmployees int,
+ 
+ primary key(branchNumber)
+); 
+
+create table Publisher 
+(
+ publisherCode int not null auto_increment,
+ publisherName nvarchar(50) not null,
+ publisherCity nvarchar(50),
+ publisherState enum ('QLD', 'SA', 'VIC', 'NSW', 'TAS', 'WA', 'NT', 'ACT'),
+ primary key(publisherCode)
+); 
+
+create table Author 
+(
+ AuthorID int not null auto_increment,
+ firstName nvarchar(50) not null,
+ lastName nvarchar(50) not null,
+ 
+ primary key(AuthorID)
+); 
+
+create table Book 
+( 
+ ISBN int(13) not null, 
+ title nvarchar(50) not null,
+ publisherCode int, 
+ genre enum('Non-Fiction', 'Science Fiction', 'Fantasy', 'Crime', 'Mystery', 'Young Adult', 'Romance', 'General Fiction'),
+ retailPrice double,
+ paperback bool, 
+ 
+ primary key(ISBN),
+ constraint checkISBN check (ISBN <= 9999999999999),
+ foreign key(publisherCode) references Publisher(publisherCode) 
+); 
+
+create table Wrote
+(
+ISBN int not null,
+authorID int not null,
+sequenceNumbers int,
+
+primary key(ISBN),
+foreign key(authorID) references Author(authorID),
+foreign key(ISBN) references Book(ISBN)
+);
+
+
+create table Inventory
+(
+ISBN int not null,
+branchNumber int not null,
+quantityInStock int default 0, 
+
+primary key(ISBN),
+foreign key(ISBN) references Book(ISBN),
+foreign key(branchNumber) references Branch(branchNumber)
+);
+
+
+
+
+
+/* task 2 */
+
+-- q1
+select pl.firstName, pl.lastName, pl.dob, pl.gender, pl.email
+from player pl
+where pl.suburb = 'Sunnybank';
+
+-- q2
+select pr.username, pr.cost
+from purchase pr 
+order by pr.username desc;
+
+-- ...
+select username, phoneNumber, 
+(select dob from player
+where player.username = phonenumber.username) as dob
+from phonenumber
+order by dob asc limit 1; 
+
+select b.badgeName, pl.firstName, pl.lastName, pl.email 
+from badge b
+left join purchase pr on pr.badgeID = b.badgeId 
+left join player pl on pr.username = pl.username
+order by b.badgeName, pl.firstName, pl.LastName asc;
+
+select pl.firstName, pl.lastName, count(qt.questID)
+from player pl, playertreasure ptr, treasure tr, quest qt
+where pl.username = ptr.username
+and tr.treasureID = ptr.treasureID and tr.type = 'common'
+and tr.questID = qt.questID
+group by pl.firstName, pl.lastName; 
+
+/* task 3 */
+insert badge (badgeName, badgeDescription)
+values ('Fools Gold', 'Trickiest trickster in all the seas')
+
+set sql_safe_updates = 0;
+delete from playerprogress where progress = 'inactive';
+set sql_safe_updates = 1;
+
+set sql_safe_updates = 0;
+update player set streetName = 'Evergreen Terrace, Springfield'
+where lastName = 'Smith' and streetName = 'Zelda Street' and streetNumber = 180;
+set sql_safe_updates = 1;
+
+/* task 4 */ 
+create index idx1_tr on treasure(webpage);
+
+create view v_playerdetail as 
+select pl.firstName, pl.lastName, pl.creationDateTime
+from player pl, playerprogress pp
+where pl.username = ppl.username 
+and ppl.progress != 'complete';
+
+select * from v_playerdetail
+
+/* task 5 */
+create user nikki@localhost identified by 'secret';
+create user phil@localhost identified by 'secret';
+
+grant insert 
+on treasurehunters.player
+to nikki@localhost;
+
+grant delete
+on treasurehunters.player
+to nikki@localhost;
+
+revoke insert 
+on treasurehunters.player
+from phil@localhost;
+
+revoke delete 
+on treasurehunters.player
+from phil@localhost;
